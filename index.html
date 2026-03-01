@@ -220,4 +220,130 @@ function setFilter(i) { activeFilter=i; renderFilterBar(); renderList(); }
 function renderList() {
   const q=document.getElementById('search-input').value.toLowerCase();
   let list=[...entries].sort((a,b)=>b.ts-a.ts);
-  if(active
+  if(activeFilter!==null) list=list.filter(e=>e.mood===activeFilter);
+  if(q) list=list.filter(e=>(e.title+e.body).toLowerCase().includes(q));
+  document.getElementById('entry-count').textContent = entries.length?`共 ${entries.length} 篇记录`:'暂无记录';
+  const el=document.getElementById('entry-list');
+  if(!list.length) { el.innerHTML=`<div class="empty-state"><div class="icon">🌿</div><p>${q?'没有找到相关日记':'还没有日记，点击 + 开始记录吧'}</p></div>`; return; }
+  el.innerHTML=list.map(e=>`
+    <div class="entry-card" onclick="openDetail('${e.id}')">
+      <div class="entry-header"><span class="entry-date">${formatShort(e.ts)}</span><span class="entry-mood">${e.mood!==null?MOODS[e.mood].emoji:'📝'}</span></div>
+      <div class="entry-title">${e.title||'无标题'}</div>
+      <div class="entry-preview">${e.body||'…'}</div>
+    </div>`).join('');
+}
+
+function openWrite(id=null) {
+  editingId=id; selectedMood=null;
+  const e=id?entries.find(x=>x.id===id):null;
+  document.getElementById('write-nav-title').textContent=id?'编辑日记':'新日记';
+  document.getElementById('write-title').value=e?.title||'';
+  document.getElementById('write-body').value=e?.body||'';
+  document.getElementById('write-date-hint').textContent=formatDate(e?.ts||Date.now());
+  if(e) selectedMood=e.mood;
+  document.getElementById('ai-write-panel').classList.remove('visible');
+  document.getElementById('ai-write-input').value='';
+  renderMoodBar(); showScreen('screen-write');
+}
+
+function saveEntry() {
+  const title=document.getElementById('write-title').value.trim();
+  const body=document.getElementById('write-body').value.trim();
+  if(!title&&!body){alert('请写点什么再保存～');return;}
+  if(editingId) { const e=entries.find(x=>x.id===editingId); e.title=title;e.body=body;e.mood=selectedMood; }
+  else entries.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),ts:Date.now(),title,body,mood:selectedMood});
+  save(); goHome();
+}
+
+function openDetail(id) {
+  currentDetailId=id;
+  const e=entries.find(x=>x.id===id);
+  document.getElementById('detail-mood').textContent=e.mood!==null?MOODS[e.mood].emoji:'📝';
+  document.getElementById('detail-date').textContent=formatDate(e.ts);
+  document.getElementById('detail-title').textContent=e.title||'无标题';
+  document.getElementById('detail-content').textContent=e.body||'';
+  document.getElementById('summary-card').style.display='none';
+  document.getElementById('ai-summary-loading').classList.remove('visible');
+  showScreen('screen-detail');
+}
+
+function deleteEntry() {
+  if(!confirm('确认删除这篇日记？'))return;
+  entries=entries.filter(e=>e.id!==currentDetailId);
+  save(); goHome();
+}
+
+function goHome() { renderFilterBar(); renderList(); showScreen('screen-home'); }
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toggleAIPanel(type) {
+  const panel=document.getElementById(`ai-${type}-panel`);
+  panel.classList.toggle('visible');
+  if(panel.classList.contains('visible')) document.getElementById(`ai-${type}-input`).focus();
+}
+
+// AI 帮我写日记
+async function aiWrite() {
+  const input=document.getElementById('ai-write-input').value.trim();
+  if(!input){alert('请先描述一下今天发生了什么～');return;}
+  const btn=document.getElementById('ai-write-btn');
+  const loading=document.getElementById('ai-write-loading');
+  btn.disabled=true; loading.classList.add('visible');
+  try {
+    const mood=selectedMood!==null?`我现在的心情是${MOODS[selectedMood].label}`:'';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:`请根据以下内容帮我写一篇温暖、真实、有感情的中文日记，风格像普通人的私人日记，第一人称，不要太正式，200字左右。${mood}。内容：${input}`}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'';
+    if(text) {
+      document.getElementById('write-body').value=text;
+      if(!document.getElementById('write-title').value) {
+        // 自动生成标题
+        const words=input.slice(0,15);
+        document.getElementById('write-title').value=words+(input.length>15?'…':'');
+      }
+      document.getElementById('ai-write-panel').classList.remove('visible');
+    }
+  } catch(e) { alert('AI 暂时不可用，请稍后再试～'); }
+  btn.disabled=false; loading.classList.remove('visible');
+}
+
+// AI 总结心情
+async function aiSummarize() {
+  const e=entries.find(x=>x.id===currentDetailId);
+  if(!e?.body){alert('这篇日记没有内容～');return;}
+  const loading=document.getElementById('ai-summary-loading');
+  const card=document.getElementById('summary-card');
+  loading.classList.add('visible'); card.style.display='none';
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        messages:[{role:'user',content:`请分析这篇日记中作者的情绪状态，用温柔、共情的语气，给出2-3句话的心情总结，像一个好朋友在说话。日记内容：${e.body}`}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'';
+    if(text) { document.getElementById('summary-text').textContent=text; card.style.display='block'; }
+  } catch(err) { alert('AI 暂时不可用，请稍后再试～'); }
+  loading.classList.remove('visible');
+}
+
+renderFilterBar(); renderList();
+</script>
+</body>
+</html>
