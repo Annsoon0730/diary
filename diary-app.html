@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="我的日记">
+<title>我的日记</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #f9f7f4;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --sub: #8e8e93;
+    --border: #e8e5e0;
+    --accent: #6b7c93;
+    --accent-light: #eef0f3;
+    --danger: #ff6b6b;
+  }
+  body { font-family: -apple-system, 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  /* SCREENS */
+  .screen { display: none; flex-direction: column; min-height: 100vh; }
+  .screen.active { display: flex; }
+
+  /* NAV BAR */
+  .navbar { padding: 56px 20px 12px; background: var(--bg); position: sticky; top: 0; z-index: 10; }
+  .navbar h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .navbar .sub { font-size: 13px; color: var(--sub); margin-top: 2px; }
+
+  /* SEARCH BAR */
+  .search-wrap { padding: 8px 20px 12px; background: var(--bg); }
+  .search-box { display: flex; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; gap: 8px; }
+  .search-box input { flex: 1; border: none; outline: none; font-size: 15px; background: transparent; color: var(--text); }
+  .search-box input::placeholder { color: var(--sub); }
+  .search-icon { color: var(--sub); font-size: 14px; }
+
+  /* ENTRY LIST */
+  .list { flex: 1; padding: 4px 20px 100px; overflow-y: auto; }
+  .entry-card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+  .entry-card:active { transform: scale(0.98); }
+  .entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .entry-date { font-size: 12px; color: var(--sub); font-weight: 500; }
+  .entry-mood { font-size: 20px; }
+  .entry-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .entry-preview { font-size: 14px; color: var(--sub); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--sub); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* FAB */
+  .fab { position: fixed; bottom: 32px; right: 24px; width: 56px; height: 56px; background: var(--accent); color: white; border: none; border-radius: 50%; font-size: 26px; cursor: pointer; box-shadow: 0 4px 16px rgba(107,124,147,0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.15s; z-index: 20; }
+  .fab:active { transform: scale(0.92); }
+
+  /* WRITE SCREEN */
+  .write-nav { display: flex; align-items: center; justify-content: space-between; padding: 56px 20px 16px; background: var(--bg); }
+  .write-nav .back-btn { font-size: 15px; color: var(--accent); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .write-nav .save-btn { background: var(--accent); color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+  .write-nav .save-btn:active { opacity: 0.7; }
+  .write-nav .title-center { font-size: 17px; font-weight: 600; }
+
+  .mood-bar { padding: 8px 20px 16px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+  .mood-bar::-webkit-scrollbar { display: none; }
+  .mood-chip { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 8px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+  .mood-chip.selected { border-color: var(--accent); background: var(--accent-light); }
+  .mood-chip .emoji { font-size: 22px; }
+  .mood-chip .label { font-size: 11px; color: var(--sub); }
+  .mood-chip.selected .label { color: var(--accent); }
+
+  .write-area { flex: 1; padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+  .title-input { font-size: 22px; font-weight: 700; border: none; outline: none; background: transparent; width: 100%; color: var(--text); }
+  .title-input::placeholder { color: #ccc; }
+  .divider { height: 1px; background: var(--border); }
+  .body-input { flex: 1; font-size: 16px; line-height: 1.7; border: none; outline: none; background: transparent; resize: none; width: 100%; color: var(--text); min-height: 200px; }
+  .body-input::placeholder { color: #ccc; }
+  .date-hint { font-size: 12px; color: var(--sub); padding: 12px 20px 4px; }
+
+  /* DETAIL SCREEN */
+  .detail-nav { display: flex; align-items: center; justify-content: space-between; padding: 56px 20px 16px; background: var(--bg); }
+  .detail-nav .back-btn { font-size: 15px; color: var(--accent); cursor: pointer; }
+  .detail-nav .delete-btn { font-size: 15px; color: var(--danger); cursor: pointer; }
+  .detail-body { flex: 1; padding: 0 24px; overflow-y: auto; padding-bottom: 40px; }
+  .detail-mood { font-size: 32px; margin-bottom: 8px; }
+  .detail-date { font-size: 13px; color: var(--sub); margin-bottom: 12px; font-weight: 500; }
+  .detail-title { font-size: 26px; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+  .detail-content { font-size: 16px; line-height: 1.8; color: #333; white-space: pre-wrap; word-break: break-word; }
+
+  /* MOOD FILTER CHIPS */
+  .filter-bar { padding: 0 20px 8px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; cursor: pointer; color: var(--sub); transition: all 0.15s; }
+  .filter-chip.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div class="screen active" id="screen-home">
+  <div class="navbar">
+    <h1>我的日记 📓</h1>
+    <div class="sub" id="entry-count">暂无记录</div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="搜索日记..." oninput="renderList()">
+    </div>
+  </div>
+  <div class="filter-bar" id="filter-bar"></div>
+  <div class="list" id="entry-list"></div>
+  <button class="fab" onclick="openWrite()">＋</button>
+</div>
+
+<!-- WRITE SCREEN -->
+<div class="screen" id="screen-write">
+  <div class="write-nav">
+    <div class="back-btn" onclick="goHome()">‹ 返回</div>
+    <div class="title-center" id="write-nav-title">新日记</div>
+    <button class="save-btn" onclick="saveEntry()">保存</button>
+  </div>
+  <div class="date-hint" id="write-date-hint"></div>
+  <div class="mood-bar" id="mood-bar"></div>
+  <div class="write-area">
+    <input class="title-input" id="write-title" type="text" placeholder="今天的标题…" maxlength="50">
+    <div class="divider"></div>
+    <textarea class="body-input" id="write-body" placeholder="写下今天的心情和故事…"></textarea>
+  </div>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div class="screen" id="screen-detail">
+  <div class="detail-nav">
+    <div class="back-btn" onclick="goHome()">‹ 返回</div>
+    <div class="delete-btn" onclick="deleteEntry()">删除</div>
+  </div>
+  <div class="detail-body">
+    <div class="detail-mood" id="detail-mood"></div>
+    <div class="detail-date" id="detail-date"></div>
+    <div class="detail-title" id="detail-title"></div>
+    <div class="detail-content" id="detail-content"></div>
+  </div>
+</div>
+
+<script>
+const MOODS = [
+  { emoji: '😊', label: '开心' },
+  { emoji: '🥰', label: '幸福' },
+  { emoji: '😌', label: '平静' },
+  { emoji: '🤔', label: '思考' },
+  { emoji: '😴', label: '疲惫' },
+  { emoji: '😢', label: '难过' },
+  { emoji: '😤', label: '烦躁' },
+  { emoji: '🥳', label: '庆祝' },
+  { emoji: '😰', label: '焦虑' },
+  { emoji: '❤️', label: '爱' },
+];
+
+let entries = JSON.parse(localStorage.getItem('diary_entries') || '[]');
+let selectedMood = null;
+let editingId = null;
+let currentDetailId = null;
+let activeFilter = null;
+
+function save() { localStorage.setItem('diary_entries', JSON.stringify(entries)); }
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  const days = ['日','一','二','三','四','五','六'];
+  return `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · 周${days[d.getDay()]} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function formatShort(ts) {
+  const d = new Date(ts), now = new Date();
+  const diff = now - d;
+  if (diff < 86400000 && d.getDate() === now.getDate()) return '今天';
+  if (diff < 172800000) return '昨天';
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+
+function renderMoodBar() {
+  const bar = document.getElementById('mood-bar');
+  bar.innerHTML = MOODS.map((m,i) => `
+    <div class="mood-chip ${selectedMood===i?'selected':''}" onclick="selectMood(${i})">
+      <span class="emoji">${m.emoji}</span>
+      <span class="label">${m.label}</span>
+    </div>`).join('');
+}
+
+function selectMood(i) {
+  selectedMood = selectedMood === i ? null : i;
+  renderMoodBar();
+}
+
+function renderFilterBar() {
+  const bar = document.getElementById('filter-bar');
+  bar.innerHTML = `<div class="filter-chip ${activeFilter===null?'active':''}" onclick="setFilter(null)">全部</div>` +
+    MOODS.map((m,i) => `<div class="filter-chip ${activeFilter===i?'active':''}" onclick="setFilter(${i})">${m.emoji} ${m.label}</div>`).join('');
+}
+
+function setFilter(i) { activeFilter = i; renderFilterBar(); renderList(); }
+
+function renderList() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let list = [...entries].sort((a,b) => b.ts - a.ts);
+  if (activeFilter !== null) list = list.filter(e => e.mood === activeFilter);
+  if (q) list = list.filter(e => (e.title+e.body).toLowerCase().includes(q));
+
+  const el = document.getElementById('entry-list');
+  const cnt = document.getElementById('entry-count');
+  cnt.textContent = entries.length ? `共 ${entries.length} 篇记录` : '暂无记录';
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">🌿</div><p>${q?'没有找到相关日记':'还没有日记，点击 + 开始记录吧'}</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(e => `
+    <div class="entry-card" onclick="openDetail('${e.id}')">
+      <div class="entry-header">
+        <span class="entry-date">${formatShort(e.ts)}</span>
+        <span class="entry-mood">${e.mood!==null?MOODS[e.mood].emoji:'📝'}</span>
+      </div>
+      <div class="entry-title">${e.title||'无标题'}</div>
+      <div class="entry-preview">${e.body||'…'}</div>
+    </div>`).join('');
+}
+
+function openWrite(id=null) {
+  editingId = id;
+  selectedMood = null;
+  const entry = id ? entries.find(e=>e.id===id) : null;
+  document.getElementById('write-nav-title').textContent = id ? '编辑日记' : '新日记';
+  document.getElementById('write-title').value = entry?.title||'';
+  document.getElementById('write-body').value = entry?.body||'';
+  document.getElementById('write-date-hint').textContent = formatDate(entry?.ts||Date.now());
+  if (entry) selectedMood = entry.mood;
+  renderMoodBar();
+  showScreen('screen-write');
+  setTimeout(()=>document.getElementById('write-body').focus(),300);
+}
+
+function saveEntry() {
+  const title = document.getElementById('write-title').value.trim();
+  const body = document.getElementById('write-body').value.trim();
+  if (!title && !body) { alert('请写点什么再保存～'); return; }
+  if (editingId) {
+    const e = entries.find(x=>x.id===editingId);
+    e.title=title; e.body=body; e.mood=selectedMood;
+  } else {
+    entries.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2), ts: Date.now(), title, body, mood: selectedMood });
+  }
+  save(); goHome();
+}
+
+function openDetail(id) {
+  currentDetailId = id;
+  const e = entries.find(x=>x.id===id);
+  document.getElementById('detail-mood').textContent = e.mood!==null ? MOODS[e.mood].emoji : '📝';
+  document.getElementById('detail-date').textContent = formatDate(e.ts);
+  document.getElementById('detail-title').textContent = e.title||'无标题';
+  document.getElementById('detail-content').textContent = e.body||'';
+  showScreen('screen-detail');
+}
+
+function deleteEntry() {
+  if (!confirm('确认删除这篇日记？')) return;
+  entries = entries.filter(e=>e.id!==currentDetailId);
+  save(); goHome();
+}
+
+function goHome() {
+  renderFilterBar(); renderList();
+  showScreen('screen-home');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// init
+renderFilterBar();
+renderList();
+</script>
+</body>
+</html>
