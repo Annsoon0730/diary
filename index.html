@@ -18,24 +18,20 @@
   .screen { display: none; flex-direction: column; min-height: 100vh; }
   .screen.active { display: flex; }
 
-  /* NAVBAR */
   .navbar { padding: 56px 20px 12px; background: var(--bg); position: sticky; top: 0; z-index: 10; }
   .navbar h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
   .navbar .sub { font-size: 13px; color: var(--sub); margin-top: 2px; }
 
-  /* SEARCH */
   .search-wrap { padding: 8px 20px 12px; background: var(--bg); }
   .search-box { display: flex; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; gap: 8px; }
   .search-box input { flex: 1; border: none; outline: none; font-size: 15px; background: transparent; color: var(--text); }
   .search-box input::placeholder { color: var(--sub); }
 
-  /* FILTER */
   .filter-bar { padding: 0 20px 8px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
   .filter-bar::-webkit-scrollbar { display: none; }
   .filter-chip { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; cursor: pointer; color: var(--sub); transition: all 0.15s; }
   .filter-chip.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 600; }
 
-  /* LIST */
   .list { flex: 1; padding: 4px 20px 100px; overflow-y: auto; }
   .entry-card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s; }
   .entry-card:active { transform: scale(0.98); }
@@ -47,19 +43,16 @@
   .empty-state { text-align: center; padding: 80px 20px; color: var(--sub); }
   .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
 
-  /* FAB */
   .fab { position: fixed; bottom: 32px; right: 24px; width: 56px; height: 56px; background: var(--accent); color: white; border: none; border-radius: 50%; font-size: 26px; cursor: pointer; box-shadow: 0 4px 16px rgba(107,124,147,0.4); display: flex; align-items: center; justify-content: center; z-index: 20; transition: transform 0.15s; }
   .fab:active { transform: scale(0.92); }
 
-  /* WRITE SCREEN */
   .write-nav { display: flex; align-items: center; justify-content: space-between; padding: 56px 20px 16px; background: var(--bg); }
   .back-btn { font-size: 15px; color: var(--accent); cursor: pointer; }
   .save-btn { background: var(--accent); color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .save-btn:active { opacity: 0.7; }
+  .save-btn:disabled { opacity: 0.5; }
   .write-nav-title { font-size: 17px; font-weight: 600; }
   .date-hint { font-size: 12px; color: var(--sub); padding: 0 20px 8px; }
 
-  /* MOOD BAR */
   .mood-bar { padding: 8px 20px 16px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
   .mood-bar::-webkit-scrollbar { display: none; }
   .mood-chip { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 8px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
@@ -68,7 +61,6 @@
   .mood-chip .label { font-size: 11px; color: var(--sub); }
   .mood-chip.selected .label { color: var(--accent); }
 
-  /* WRITE AREA */
   .write-area { flex: 1; padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
   .title-input { font-size: 22px; font-weight: 700; border: none; outline: none; background: transparent; width: 100%; color: var(--text); }
   .title-input::placeholder { color: #ccc; }
@@ -76,13 +68,10 @@
   .body-input { flex: 1; font-size: 16px; line-height: 1.7; border: none; outline: none; background: transparent; resize: none; width: 100%; color: var(--text); min-height: 200px; }
   .body-input::placeholder { color: #ccc; }
 
-  /* AI TOOLBAR */
   .ai-toolbar { padding: 12px 20px; display: flex; gap: 8px; border-top: 1px solid var(--border); background: var(--bg); }
-  .ai-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; color: var(--accent); cursor: pointer; font-weight: 500; transition: all 0.15s; }
+  .ai-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); font-size: 13px; color: var(--accent); cursor: pointer; font-weight: 500; }
   .ai-btn:active { background: var(--accent-light); }
-  .ai-btn .btn-icon { font-size: 16px; }
 
-  /* AI INPUT PANEL */
   .ai-panel { padding: 16px 20px; background: var(--accent-light); border-top: 1px solid var(--border); display: none; flex-direction: column; gap: 10px; }
   .ai-panel.visible { display: flex; }
   .ai-panel-title { font-size: 13px; color: var(--accent); font-weight: 600; }
@@ -90,10 +79,9 @@
   .ai-input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card); color: var(--text); }
   .ai-send-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-size: 14px; cursor: pointer; font-weight: 600; white-space: nowrap; }
   .ai-send-btn:disabled { opacity: 0.5; }
-  .ai-loading { font-size: 13px; color: var(--sub); text-align: center; display: none; }
+  .ai-loading { font-size: 13px; color: var(--sub); text-align: center; display: none; padding: 4px 0; }
   .ai-loading.visible { display: block; }
 
-  /* DETAIL */
   .detail-nav { display: flex; align-items: center; justify-content: space-between; padding: 56px 20px 16px; background: var(--bg); }
   .delete-btn { font-size: 15px; color: var(--danger); cursor: pointer; }
   .detail-body { flex: 1; padding: 0 24px 40px; overflow-y: auto; }
@@ -102,21 +90,26 @@
   .detail-title { font-size: 26px; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
   .detail-content { font-size: 16px; line-height: 1.8; color: #333; white-space: pre-wrap; word-break: break-word; }
 
-  /* AI SUMMARY CARD */
   .summary-card { margin-top: 24px; background: var(--accent-light); border-radius: 14px; padding: 14px 16px; border: 1px solid var(--border); }
   .summary-card .summary-label { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
   .summary-card .summary-text { font-size: 14px; color: var(--text); line-height: 1.6; }
   .summarize-btn { margin-top: 20px; width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); font-size: 14px; color: var(--accent); font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .summarize-btn:active { background: var(--accent-light); }
+
+  /* 同步状态提示 */
+  .sync-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 8px 18px; border-radius: 20px; font-size: 13px; z-index: 99; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .sync-toast.show { opacity: 1; }
 </style>
 </head>
 <body>
+
+<div class="sync-toast" id="sync-toast"></div>
 
 <!-- HOME -->
 <div class="screen active" id="screen-home">
   <div class="navbar">
     <h1>我的日记 📓</h1>
-    <div class="sub" id="entry-count">暂无记录</div>
+    <div class="sub" id="entry-count">加载中…</div>
   </div>
   <div class="search-wrap">
     <div class="search-box">
@@ -125,7 +118,7 @@
     </div>
   </div>
   <div class="filter-bar" id="filter-bar"></div>
-  <div class="list" id="entry-list"></div>
+  <div class="list" id="entry-list"><div class="empty-state"><div class="icon">🌿</div><p>加载中…</p></div></div>
   <button class="fab" onclick="openWrite()">＋</button>
 </div>
 
@@ -134,7 +127,7 @@
   <div class="write-nav">
     <div class="back-btn" onclick="goHome()">‹ 返回</div>
     <div class="write-nav-title" id="write-nav-title">新日记</div>
-    <button class="save-btn" onclick="saveEntry()">保存</button>
+    <button class="save-btn" id="save-btn" onclick="saveEntry()">保存</button>
   </div>
   <div class="date-hint" id="write-date-hint"></div>
   <div class="mood-bar" id="mood-bar"></div>
@@ -143,14 +136,13 @@
     <div class="divider"></div>
     <textarea class="body-input" id="write-body" placeholder="写下今天的心情和故事…"></textarea>
   </div>
-  <!-- AI 工具栏 -->
   <div class="ai-toolbar">
-    <div class="ai-btn" onclick="toggleAIPanel('write')">
-      <span class="btn-icon">✨</span> AI 帮我写
+    <div class="ai-btn" onclick="toggleAIPanel()">
+      <span>✨</span> AI 帮我写
     </div>
   </div>
   <div class="ai-panel" id="ai-write-panel">
-    <div class="ai-panel-title">✨ 告诉 AI 你今天发生了什么，它来帮你写成日记</div>
+    <div class="ai-panel-title">✨ 告诉 AI 今天发生了什么，它来帮你写成日记</div>
     <div class="ai-input-row">
       <input class="ai-input" id="ai-write-input" type="text" placeholder="今天去爬山，很累但很开心…">
       <button class="ai-send-btn" id="ai-write-btn" onclick="aiWrite()">生成</button>
@@ -180,170 +172,239 @@
 </div>
 
 <script>
+// ── Supabase 配置 ──
+const SB_URL = 'https://twjwmhecatucpymiqwck.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3andtaGVjYXR1Y3B5bWlxd2NrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjI4NjMsImV4cCI6MjA4NzgzODg2M30.dsTGvBpW5LhJ4IgSoMIQ1RercjB9Z7CKhSLoiFYkpyE';
+const TABLE = 'diary_entries';
+
+const headers = {
+  'Content-Type': 'application/json',
+  'apikey': SB_KEY,
+  'Authorization': `Bearer ${SB_KEY}`
+};
+
+async function dbLoad() {
+  const res = await fetch(`${SB_URL}/rest/v1/${TABLE}?order=ts.desc`, { headers });
+  if (!res.ok) throw new Error('加载失败');
+  return await res.json();
+}
+
+async function dbInsert(e) {
+  const res = await fetch(`${SB_URL}/rest/v1/${TABLE}`, {
+    method: 'POST', headers: { ...headers, 'Prefer': 'return=minimal' },
+    body: JSON.stringify(e)
+  });
+  if (!res.ok) throw new Error('保存失败');
+}
+
+async function dbUpdate(e) {
+  const res = await fetch(`${SB_URL}/rest/v1/${TABLE}?id=eq.${e.id}`, {
+    method: 'PATCH', headers: { ...headers, 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ title: e.title, body: e.body, mood: e.mood })
+  });
+  if (!res.ok) throw new Error('更新失败');
+}
+
+async function dbDelete(id) {
+  const res = await fetch(`${SB_URL}/rest/v1/${TABLE}?id=eq.${id}`, {
+    method: 'DELETE', headers
+  });
+  if (!res.ok) throw new Error('删除失败');
+}
+
+// ── 状态 ──
 const MOODS = [
   {emoji:'😊',label:'开心'},{emoji:'🥰',label:'幸福'},{emoji:'😌',label:'平静'},
   {emoji:'🤔',label:'思考'},{emoji:'😴',label:'疲惫'},{emoji:'😢',label:'难过'},
   {emoji:'😤',label:'烦躁'},{emoji:'🥳',label:'庆祝'},{emoji:'😰',label:'焦虑'},{emoji:'❤️',label:'爱'},
 ];
 
-let entries = JSON.parse(localStorage.getItem('diary_entries')||'[]');
-let selectedMood=null, editingId=null, currentDetailId=null, activeFilter=null;
+let entries = [], selectedMood = null, editingId = null, currentDetailId = null, activeFilter = null;
 
-function save() { localStorage.setItem('diary_entries', JSON.stringify(entries)); }
+function toast(msg, dur=2000) {
+  const t = document.getElementById('sync-toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
 
 function formatDate(ts) {
-  const d=new Date(ts), days=['日','一','二','三','四','五','六'];
+  const d = new Date(ts), days = ['日','一','二','三','四','五','六'];
   return `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · 周${days[d.getDay()]} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
 function formatShort(ts) {
-  const d=new Date(ts),now=new Date(),diff=now-d;
-  if(diff<86400000&&d.getDate()===now.getDate()) return '今天';
-  if(diff<172800000) return '昨天';
+  const d = new Date(ts), now = new Date(), diff = now - d;
+  if (diff < 86400000 && d.getDate() === now.getDate()) return '今天';
+  if (diff < 172800000) return '昨天';
   return `${d.getMonth()+1}/${d.getDate()}`;
 }
 
 function renderMoodBar() {
-  document.getElementById('mood-bar').innerHTML = MOODS.map((m,i)=>`
+  document.getElementById('mood-bar').innerHTML = MOODS.map((m,i) => `
     <div class="mood-chip ${selectedMood===i?'selected':''}" onclick="selectMood(${i})">
       <span class="emoji">${m.emoji}</span><span class="label">${m.label}</span>
     </div>`).join('');
 }
-function selectMood(i) { selectedMood=selectedMood===i?null:i; renderMoodBar(); }
+function selectMood(i) { selectedMood = selectedMood===i ? null : i; renderMoodBar(); }
 
 function renderFilterBar() {
   document.getElementById('filter-bar').innerHTML =
-    `<div class="filter-chip ${activeFilter===null?'active':''}" onclick="setFilter(null)">全部</div>`+
-    MOODS.map((m,i)=>`<div class="filter-chip ${activeFilter===i?'active':''}" onclick="setFilter(${i})">${m.emoji} ${m.label}</div>`).join('');
+    `<div class="filter-chip ${activeFilter===null?'active':''}" onclick="setFilter(null)">全部</div>` +
+    MOODS.map((m,i) => `<div class="filter-chip ${activeFilter===i?'active':''}" onclick="setFilter(${i})">${m.emoji} ${m.label}</div>`).join('');
 }
-function setFilter(i) { activeFilter=i; renderFilterBar(); renderList(); }
+function setFilter(i) { activeFilter = i; renderFilterBar(); renderList(); }
 
 function renderList() {
-  const q=document.getElementById('search-input').value.toLowerCase();
-  let list=[...entries].sort((a,b)=>b.ts-a.ts);
-  if(activeFilter!==null) list=list.filter(e=>e.mood===activeFilter);
-  if(q) list=list.filter(e=>(e.title+e.body).toLowerCase().includes(q));
-  document.getElementById('entry-count').textContent = entries.length?`共 ${entries.length} 篇记录`:'暂无记录';
-  const el=document.getElementById('entry-list');
-  if(!list.length) { el.innerHTML=`<div class="empty-state"><div class="icon">🌿</div><p>${q?'没有找到相关日记':'还没有日记，点击 + 开始记录吧'}</p></div>`; return; }
-  el.innerHTML=list.map(e=>`
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let list = [...entries];
+  if (activeFilter !== null) list = list.filter(e => e.mood === activeFilter);
+  if (q) list = list.filter(e => (e.title+e.body).toLowerCase().includes(q));
+  document.getElementById('entry-count').textContent = entries.length ? `共 ${entries.length} 篇记录` : '暂无记录';
+  const el = document.getElementById('entry-list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">🌿</div><p>${q?'没有找到相关日记':'还没有日记，点击 + 开始记录吧'}</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(e => `
     <div class="entry-card" onclick="openDetail('${e.id}')">
-      <div class="entry-header"><span class="entry-date">${formatShort(e.ts)}</span><span class="entry-mood">${e.mood!==null?MOODS[e.mood].emoji:'📝'}</span></div>
+      <div class="entry-header"><span class="entry-date">${formatShort(e.ts)}</span><span class="entry-mood">${e.mood!=null?MOODS[e.mood].emoji:'📝'}</span></div>
       <div class="entry-title">${e.title||'无标题'}</div>
       <div class="entry-preview">${e.body||'…'}</div>
     </div>`).join('');
 }
 
+async function loadEntries() {
+  try {
+    entries = await dbLoad();
+    renderFilterBar(); renderList();
+  } catch(err) {
+    document.getElementById('entry-count').textContent = '加载失败，请检查网络';
+    document.getElementById('entry-list').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>无法连接到云端</p></div>`;
+  }
+}
+
 function openWrite(id=null) {
-  editingId=id; selectedMood=null;
-  const e=id?entries.find(x=>x.id===id):null;
-  document.getElementById('write-nav-title').textContent=id?'编辑日记':'新日记';
-  document.getElementById('write-title').value=e?.title||'';
-  document.getElementById('write-body').value=e?.body||'';
-  document.getElementById('write-date-hint').textContent=formatDate(e?.ts||Date.now());
-  if(e) selectedMood=e.mood;
+  editingId = id; selectedMood = null;
+  const e = id ? entries.find(x=>x.id===id) : null;
+  document.getElementById('write-nav-title').textContent = id ? '编辑日记' : '新日记';
+  document.getElementById('write-title').value = e?.title||'';
+  document.getElementById('write-body').value = e?.body||'';
+  document.getElementById('write-date-hint').textContent = formatDate(e?.ts||Date.now());
+  if (e) selectedMood = e.mood;
   document.getElementById('ai-write-panel').classList.remove('visible');
-  document.getElementById('ai-write-input').value='';
+  document.getElementById('ai-write-input').value = '';
   renderMoodBar(); showScreen('screen-write');
 }
 
-function saveEntry() {
-  const title=document.getElementById('write-title').value.trim();
-  const body=document.getElementById('write-body').value.trim();
-  if(!title&&!body){alert('请写点什么再保存～');return;}
-  if(editingId) { const e=entries.find(x=>x.id===editingId); e.title=title;e.body=body;e.mood=selectedMood; }
-  else entries.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),ts:Date.now(),title,body,mood:selectedMood});
-  save(); goHome();
+async function saveEntry() {
+  const title = document.getElementById('write-title').value.trim();
+  const body = document.getElementById('write-body').value.trim();
+  if (!title && !body) { alert('请写点什么再保存～'); return; }
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = '保存中…';
+  try {
+    if (editingId) {
+      const e = entries.find(x=>x.id===editingId);
+      e.title = title; e.body = body; e.mood = selectedMood;
+      await dbUpdate(e);
+    } else {
+      const e = { id: Date.now().toString(36)+Math.random().toString(36).slice(2), ts: Date.now(), title, body, mood: selectedMood };
+      await dbInsert(e);
+      entries.unshift(e);
+    }
+    toast('✅ 已保存到云端');
+    goHome();
+  } catch(err) { alert('保存失败，请检查网络～'); }
+  btn.disabled = false; btn.textContent = '保存';
 }
 
 function openDetail(id) {
-  currentDetailId=id;
-  const e=entries.find(x=>x.id===id);
-  document.getElementById('detail-mood').textContent=e.mood!==null?MOODS[e.mood].emoji:'📝';
-  document.getElementById('detail-date').textContent=formatDate(e.ts);
-  document.getElementById('detail-title').textContent=e.title||'无标题';
-  document.getElementById('detail-content').textContent=e.body||'';
-  document.getElementById('summary-card').style.display='none';
+  currentDetailId = id;
+  const e = entries.find(x=>x.id===id);
+  document.getElementById('detail-mood').textContent = e.mood!=null ? MOODS[e.mood].emoji : '📝';
+  document.getElementById('detail-date').textContent = formatDate(e.ts);
+  document.getElementById('detail-title').textContent = e.title||'无标题';
+  document.getElementById('detail-content').textContent = e.body||'';
+  document.getElementById('summary-card').style.display = 'none';
   document.getElementById('ai-summary-loading').classList.remove('visible');
   showScreen('screen-detail');
 }
 
-function deleteEntry() {
-  if(!confirm('确认删除这篇日记？'))return;
-  entries=entries.filter(e=>e.id!==currentDetailId);
-  save(); goHome();
+async function deleteEntry() {
+  if (!confirm('确认删除这篇日记？')) return;
+  try {
+    await dbDelete(currentDetailId);
+    entries = entries.filter(e=>e.id!==currentDetailId);
+    toast('已删除');
+    goHome();
+  } catch(err) { alert('删除失败，请检查网络～'); }
 }
 
-function goHome() { renderFilterBar(); renderList(); showScreen('screen-home'); }
+function goHome() { loadEntries(); showScreen('screen-home'); }
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
 
-function toggleAIPanel(type) {
-  const panel=document.getElementById(`ai-${type}-panel`);
-  panel.classList.toggle('visible');
-  if(panel.classList.contains('visible')) document.getElementById(`ai-${type}-input`).focus();
+function toggleAIPanel() {
+  const p = document.getElementById('ai-write-panel');
+  p.classList.toggle('visible');
+  if (p.classList.contains('visible')) document.getElementById('ai-write-input').focus();
 }
 
-// AI 帮我写日记
 async function aiWrite() {
-  const input=document.getElementById('ai-write-input').value.trim();
-  if(!input){alert('请先描述一下今天发生了什么～');return;}
-  const btn=document.getElementById('ai-write-btn');
-  const loading=document.getElementById('ai-write-loading');
-  btn.disabled=true; loading.classList.add('visible');
+  const input = document.getElementById('ai-write-input').value.trim();
+  if (!input) { alert('请先描述一下今天发生了什么～'); return; }
+  const btn = document.getElementById('ai-write-btn');
+  const loading = document.getElementById('ai-write-loading');
+  btn.disabled = true; loading.classList.add('visible');
   try {
-    const mood=selectedMood!==null?`我现在的心情是${MOODS[selectedMood].label}`:'';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:`请根据以下内容帮我写一篇温暖、真实、有感情的中文日记，风格像普通人的私人日记，第一人称，不要太正式，200字左右。${mood}。内容：${input}`}]
+    const mood = selectedMood!==null ? `我现在的心情是${MOODS[selectedMood].label}` : '';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 1000,
+        messages: [{ role: 'user', content: `请根据以下内容帮我写一篇温暖、真实、有感情的中文日记，风格像普通人的私人日记，第一人称，不要太正式，200字左右。${mood}。内容：${input}` }]
       })
     });
-    const data=await res.json();
-    const text=data.content?.[0]?.text||'';
-    if(text) {
-      document.getElementById('write-body').value=text;
-      if(!document.getElementById('write-title').value) {
-        // 自动生成标题
-        const words=input.slice(0,15);
-        document.getElementById('write-title').value=words+(input.length>15?'…':'');
-      }
+    const data = await res.json();
+    const text = data.content?.[0]?.text||'';
+    if (text) {
+      document.getElementById('write-body').value = text;
+      if (!document.getElementById('write-title').value)
+        document.getElementById('write-title').value = input.slice(0,15)+(input.length>15?'…':'');
       document.getElementById('ai-write-panel').classList.remove('visible');
     }
-  } catch(e) { alert('AI 暂时不可用，请稍后再试～'); }
-  btn.disabled=false; loading.classList.remove('visible');
+  } catch(e) { alert('AI 暂时不可用～'); }
+  btn.disabled = false; loading.classList.remove('visible');
 }
 
-// AI 总结心情
 async function aiSummarize() {
-  const e=entries.find(x=>x.id===currentDetailId);
-  if(!e?.body){alert('这篇日记没有内容～');return;}
-  const loading=document.getElementById('ai-summary-loading');
-  const card=document.getElementById('summary-card');
-  loading.classList.add('visible'); card.style.display='none';
+  const e = entries.find(x=>x.id===currentDetailId);
+  if (!e?.body) { alert('这篇日记没有内容～'); return; }
+  const loading = document.getElementById('ai-summary-loading');
+  const card = document.getElementById('summary-card');
+  loading.classList.add('visible'); card.style.display = 'none';
   try {
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:300,
-        messages:[{role:'user',content:`请分析这篇日记中作者的情绪状态，用温柔、共情的语气，给出2-3句话的心情总结，像一个好朋友在说话。日记内容：${e.body}`}]
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 300,
+        messages: [{ role: 'user', content: `请分析这篇日记中作者的情绪状态，用温柔、共情的语气，给出2-3句话的心情总结，像一个好朋友在说话。日记内容：${e.body}` }]
       })
     });
-    const data=await res.json();
-    const text=data.content?.[0]?.text||'';
-    if(text) { document.getElementById('summary-text').textContent=text; card.style.display='block'; }
-  } catch(err) { alert('AI 暂时不可用，请稍后再试～'); }
+    const data = await res.json();
+    const text = data.content?.[0]?.text||'';
+    if (text) { document.getElementById('summary-text').textContent = text; card.style.display = 'block'; }
+  } catch(err) { alert('AI 暂时不可用～'); }
   loading.classList.remove('visible');
 }
 
-renderFilterBar(); renderList();
+// 初始化
+loadEntries();
 </script>
 </body>
 </html>
